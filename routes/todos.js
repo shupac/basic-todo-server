@@ -1,34 +1,41 @@
 var express = require('express');
 var router = express.Router();
-
-var mongoose = require('mongoose');
-var Todo = mongoose.model('Todo');
+var Todo = require('../models/todo');
 
 router.get('/', function(req, res) {
   Todo.find({}, function(err, todos){
-      if(err) res.send(err);
-      else res.json(todos);
+      if(err) {
+        console.error('Error loading todos', err);
+        res.status(500).json({ Error: 'Error loading todos' });
+      }
+      else res.status(200).json(todos);
   });
 });
 
-router.post('/create', function(req, res) {
+router.post('/', function(req, res) {
   var title = req.body.title;
   Todo.create({title: title}, function(err, todo) {
-    if (err) res.render('error', { error: 'Error creating your todo'});
-    else res.json(todo);
+    if (err) {
+      console.error('Error creating todo', err);
+      res.status(500).json({ Error: 'Error creating todo' });
+    }
+    else res.status(200).json(todo);
   });
 });
 
-router.post('/delete/:id', function(req, res) {
+router.delete('/:id', function(req, res) {
   var id = req.params.id;
 
   Todo.findByIdAndRemove(id, function(err, todo) {
-    if (err) res.render('error', { Error: 'Error deleting job' });
-    else res.json(todo);
+    if (err) {
+      console.error('Error deleting todo', err);
+      res.status(500).json({ Error: 'Error deleting todo' });
+    }
+    else res.status(200).json(todo);
   });
 });
 
-router.post('/update/:id', function(req, res) {
+router.put('/:id', function(req, res) {
   var id = req.params.id;
   var todo = {
     title: req.body.title,
@@ -37,12 +44,11 @@ router.post('/update/:id', function(req, res) {
   };
 
   Todo.findByIdAndUpdate(id, todo, function(err, todo) {
-    console.log(todo);
     if (err) {
-      console.log('Error updating todo', err);
-      res.render('error', { Error: 'Error updating todo' });
+      console.error('Error updating todo', err);
+      res.status(500).json({ Error: 'Error updating todo' });
     }
-    else res.json(todo);
+    else res.status(200).json(todo);
   });
 });
 
