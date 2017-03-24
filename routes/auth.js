@@ -1,14 +1,14 @@
-var express = require('express');
-var jwt     = require('jsonwebtoken');
-var router  = express.Router();
+const express = require('express');
+const jwt     = require('jsonwebtoken');
+const router  = express.Router();
 
-var User    = require('../models/user');
-var secret  = require('../config').secret;
+const User    = require('../models/user');
+const secret  = require('../config').secret;
 
-router.post('/', function(req, res) {
+router.post('/', (req, res) => {
   User.findOne({
     name: req.body.name
-  }, function(err, user) {
+  }, (err, user) => {
     if (err) throw err;
     if (!user) {
       res.json({ success: false, message: 'Authentication failed. User not found.'});
@@ -18,7 +18,7 @@ router.post('/', function(req, res) {
         res.json({ success: false, message: 'Authentication failed. Wrong password.'});
       }
       else {
-        var token = jwt.sign(user, secret, { expiresIn: '24h' });
+        let token = jwt.sign(user, secret, { expiresIn: '24h' });
         res.status(200).json({
           success: true,
           message: 'Enjoy your token!',
@@ -27,6 +27,11 @@ router.post('/', function(req, res) {
       }
     }
   });
+});
+
+router.options('/', (req, res) => {
+  console.log('options header');
+  res.status(200).send();
 });
 
 module.exports = router;

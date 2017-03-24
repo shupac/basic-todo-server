@@ -1,22 +1,22 @@
-var express = require('express');
-var router = express.Router();
-var User = require('../models/user');
+const express = require('express');
+const router = express.Router();
+const User = require('../models/user');
 
-router.get('/', function(req, res) {
-  User.find({}, function(err, users) {
+router.get('/', (req, res) => {
+  User.find({}, (err, users) => {
     if (err) throw err;
     res.status(200).json(users);
   });
 });
 
-router.get('/setup', function(req, res) {
-  var shu = new User({
+router.get('/setup', (req, res) => {
+  let shu = new User({
     name: 'Shu',
     password: 'pass',
     admin: true
   });
 
-  shu.save(function(err) {
+  shu.save((err) => {
     if (err) throw err;
     res.json({success: true})
   })

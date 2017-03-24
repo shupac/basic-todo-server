@@ -1,13 +1,14 @@
-var express = require('express');
-var jwt     = require('jsonwebtoken');
-var router  = express.Router();
+const express = require('express');
+const jwt     = require('jsonwebtoken');
+const router  = express.Router();
 
-var User    = require('../models/user');
-var secret  = require('../config').secret;
+const User    = require('../models/user');
+const secret  = require('../config').secret;
 
-router.use(function(req, res, next) {
-  var token = req.body.token || req.query.token || req.headers['x-access-token'];
+router.use((req, res, next) => {
+  var token = req.body.token || req.query.token || req.headers['authorization'];
   if (token) {
+    token = token.split('Bearer ')[1];
     jwt.verify(token, secret, function(err, decoded) {
       if (err) {
         return res.json({ success: false, message: 'Failed to authenticate token.'});
@@ -25,10 +26,5 @@ router.use(function(req, res, next) {
     });
   }
 });
-
-router.get('/', function(req, res) {
-  res.send({message: 'coolest API in the world!'})
-});
-
 
 module.exports = router;

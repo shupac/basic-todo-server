@@ -1,9 +1,9 @@
-var express = require('express');
-var router = express.Router();
-var Todo = require('../models/todo');
+const express = require('express');
+const router = express.Router();
+const Todo = require('../models/todo');
 
-router.get('/', function(req, res) {
-  Todo.find({}, function(err, todos){
+router.get('/', (req, res) => {
+  Todo.find({}, (err, todos)=> {
       if(err) {
         console.error('Error loading todos', err);
         res.status(500).json({ Error: 'Error loading todos' });
@@ -12,9 +12,9 @@ router.get('/', function(req, res) {
   });
 });
 
-router.post('/', function(req, res) {
-  var title = req.body.title;
-  Todo.create({title: title}, function(err, todo) {
+router.post('/', (req, res) => {
+  let title = req.body.title;
+  Todo.create({title}, (err, todo) => {
     if (err) {
       console.error('Error creating todo', err);
       res.status(500).json({ Error: 'Error creating todo' });
@@ -23,10 +23,10 @@ router.post('/', function(req, res) {
   });
 });
 
-router.delete('/:id', function(req, res) {
-  var id = req.params.id;
+router.delete('/:id', (req, res) => {
+  let id = req.params.id;
 
-  Todo.findByIdAndRemove(id, function(err, todo) {
+  Todo.findByIdAndRemove(id, (err, todo) => {
     if (err) {
       console.error('Error deleting todo', err);
       res.status(500).json({ Error: 'Error deleting todo' });
@@ -35,15 +35,15 @@ router.delete('/:id', function(req, res) {
   });
 });
 
-router.put('/:id', function(req, res) {
-  var id = req.params.id;
-  var todo = {
+router.put('/:id', (req, res) => {
+  let id = req.params.id;
+  let todo = {
     title: req.body.title,
     complete: req.body.complete,
     updated_at: Date.now()
   };
 
-  Todo.findByIdAndUpdate(id, todo, function(err, todo) {
+  Todo.findByIdAndUpdate(id, todo, (err, todo) => {
     if (err) {
       console.error('Error updating todo', err);
       res.status(500).json({ Error: 'Error updating todo' });
