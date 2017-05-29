@@ -19,8 +19,9 @@ router.post('/', (req, res) => {
         let token = jwt.sign(user, process.env.SECRET, { expiresIn: '24h' });
         res.status(200).json({
           success: true,
-          message: 'Enjoy your token!',
-          token: token
+          message: 'User authenticated',
+          token,
+          user
         });
       }
     }
@@ -53,11 +54,17 @@ router.post('/signup', (req, res) => {
       res.json({ success: false, message: 'Signup failed. User already exists.' });
     }
     else {
-      let user = new User({ user, password });
+      let user = new User({ email, password });
 
       user.save((err) => {
         if (err) throw err;
-        res.json({ success: true })
+        let token = jwt.sign(user, process.env.SECRET, { expiresIn: '24h' });
+        res.status(200).json({
+          success: true,
+          message: 'User authenticated',
+          token,
+          user
+        });
       });
     }
   });
