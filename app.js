@@ -1,3 +1,4 @@
+require('dotenv').config();
 const _           = require('lodash');
 const express     = require('express');
 const path        = require('path');
@@ -33,7 +34,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-mongoose.connect(config.database, () => console.log('database connected'));
+mongoose.connect(process.env.DB_HOST).then(
+  () => console.log('database connected'),
+  err => console.log('database connection error ' + err);
+);
 
 
 // ************************************ //
