@@ -3,9 +3,6 @@ const jwt     = require('jsonwebtoken');
 const router  = express.Router();
 
 const User    = require('../models/user');
-const secret  = require('../config').secret;
-
-const User = require('../models/user');
 
 router.post('/', (req, res) => {
   let { email, password } = req.body;
