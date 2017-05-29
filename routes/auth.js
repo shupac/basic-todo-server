@@ -34,15 +34,21 @@ router.options('/', (req, res) => {
 });
 
 router.get('/setup', (req, res) => {
-  let admin = new User({
-    email: 'admin@example.com',
-    password: 'pass',
-    admin: true
-  });
-
-  admin.save((err) => {
+  User.findOne({ email: 'admin@example.com' }, (err, user) => {
     if (err) throw err;
-    res.json({success: true})
+    if (!user) {
+      let admin = new User({
+        email: 'admin@example.com',
+        password: 'pass',
+        admin: true
+      });
+
+      admin.save((err) => {
+        if (err) throw err;
+        res.json({success: true})
+      })
+    }
+    else res.json({ success: false, message: 'Admin already setup.' });
   })
 });
 
@@ -54,7 +60,7 @@ router.post('/signup', (req, res) => {
       res.json({ success: false, message: 'Signup failed. User already exists.' });
     }
     else {
-      let user = new User({ email, password });
+      let user = new User({ email, password, admin: false });
 
       user.save((err) => {
         if (err) throw err;
@@ -63,7 +69,10 @@ router.post('/signup', (req, res) => {
           success: true,
           message: 'User authenticated',
           token,
-          user
+          user: {
+            email: user.email,
+            admin: user.admin
+          }
         });
       });
     }
