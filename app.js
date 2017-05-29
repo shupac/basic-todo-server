@@ -13,7 +13,6 @@ const passportJwt = require('passport-jwt');
 const ExtractJwt  = passportJwt.ExtractJwt;
 const JwtStrategy = passportJwt.Strategy;
 
-const config = require('./config');
 const index  = require('./routes/index');
 const auth   = require('./routes/auth');
 const users  = require('./routes/users');

@@ -9,17 +9,4 @@ router.get('/', (req, res) => {
   });
 });
 
-router.get('/setup', (req, res) => {
-  let shu = new User({
-    name: 'Shu',
-    password: 'pass',
-    admin: true
-  });
-
-  shu.save((err) => {
-    if (err) throw err;
-    res.json({success: true})
-  })
-});
-
 module.exports = router;
