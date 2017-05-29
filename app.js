@@ -39,7 +39,8 @@ mongoose.connect(config.database, () => console.log('database connected'));
 // ************************************ //
 //              CORS IN DEV             //
 // ************************************ //
-if (app.get('env') === 'development') app.use(cors());
+// if (app.get('env') === 'development') app.use(cors());
+app.use(cors());
 
 
 // ************************************ //
