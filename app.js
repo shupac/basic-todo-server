@@ -36,7 +36,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 mongoose.connect(process.env.DB_HOST).then(
   () => console.log('database connected'),
-  err => console.log('database connection error ', err);
+  err => console.log('database connection error ' + JSON.stringify(err));
 );
 
 
